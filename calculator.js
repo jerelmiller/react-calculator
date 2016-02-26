@@ -13,19 +13,6 @@ const divide = (a, b) => a / b
 const push = (arr, value) => [...arr, value]
 const intFromString = string => parseInt(string, 10)
 
-const operate = operation => {
-  switch (operation) {
-    case ADD:
-      return add
-    case SUBSTRACT:
-      return subtract
-    case MULTIPLY:
-      return multiply
-    case DIVIDE:
-      return divide
-  }
-}
-
 const Button = ({ label, onClick, style }) => (
   <button className='calculator-button' onClick={ onClick } style={ style }>
     { label }
@@ -71,7 +58,7 @@ class Calculator extends Component {
     stack = push(stack, intFromString(display))
 
     if (operation) {
-      display = stack.reduce(operate(operation))
+      display = stack.reduce(operation)
     }
 
     this.setState({ stack: [], operation: null, display, digitPressed: false })
@@ -98,21 +85,21 @@ class Calculator extends Component {
           <Button label='9' onClick={ () => this.handleNumberClick(9) } />
           <Button
             label='%'
-            onClick={ () => this.handleOperationClick(DIVIDE) }
+            onClick={ () => this.handleOperationClick(divide) }
           />
           <Button label='4' onClick={ () => this.handleNumberClick(4) } />
           <Button label='5' onClick={ () => this.handleNumberClick(5) } />
           <Button label='6' onClick={ () => this.handleNumberClick(6) } />
           <Button
             label='&times;'
-            onClick={ () => this.handleOperationClick(MULTIPLY) }
+            onClick={ () => this.handleOperationClick(multiply) }
           />
           <Button label='1' onClick={ () => this.handleNumberClick(1) } />
           <Button label='2' onClick={ () => this.handleNumberClick(2) } />
           <Button label='3' onClick={ () => this.handleNumberClick(3) } />
           <Button
             label='-'
-            onClick={ () => this.handleOperationClick(SUBSTRACT) }
+            onClick={ () => this.handleOperationClick(subtract) }
           />
           <Button
             label='0'
@@ -127,7 +114,7 @@ class Calculator extends Component {
           />
           <Button
             label='+'
-            onClick={ () => this.handleOperationClick(ADD) }
+            onClick={ () => this.handleOperationClick(add) }
           />
         </div>
       </div>
