@@ -21,8 +21,8 @@ const Display = ({ value }) => (
   <div className='calculator-display'>{ value }</div>
 )
 
-const calculateDisplay = (state, number) => (
-  state.digitPressed ? intFromString(`${state.display}${number}`) : number
+const calculateDisplay = (state, digit) => (
+  state.digitPressed ? intFromString(`${state.display}${digit}`) : digit
 )
 
 const initialState = {
@@ -32,40 +32,57 @@ const initialState = {
   stack: []
 }
 
+const pressDigit = digit => ({
+  type: 'PRESS_DIGIT',
+  digit
+})
+
+const pressOperation = operation => ({
+  type: 'PRESS_OPERATION',
+  operation
+})
+
+const pressEqual = () => ({ type: 'PRESS_EQUAL' })
+const pressClear = () => ({ type: 'PRESS_CLEAR' })
+
+const calculateState = (state = initialState, action) => {
+  switch (action.type) {
+    case 'PRESS_DIGIT':
+      return Object.assign({}, state, {
+        display: calculateDisplay(state, action.digit),
+        digitPressed: true
+      })
+    case 'PRESS_OPERATION':
+      return Object.assign({}, state, {
+        operation: action.operation,
+        stack: push(state.stack, intFromString(state.display)),
+        digitPressed: false
+      })
+    case 'PRESS_EQUAL':
+      const finalStack = push(state.stack, intFromString(state.display))
+
+      return Object.assign({}, state, {
+        stack: [],
+        operation: identity,
+        display: calculateValue(finalStack, state.operation),
+        digitPressed: false
+      })
+    case 'PRESS_CLEAR':
+      return initialState
+    default:
+      return state
+  }
+}
+
 class Calculator extends Component {
   constructor(props) {
     super(props)
 
-    this.state = initialState
+    this.state = calculateState(undefined, {})
   }
 
-  handleNumberClick(number) {
-    this.setState({
-      display: calculateDisplay(this.state, number),
-      digitPressed: true
-    })
-  }
-
-  handleOperationClick(operation) {
-    let { display, stack } = this.state
-
-    this.setState({
-      operation,
-      stack: push(stack, intFromString(display)),
-      digitPressed: false
-    })
-  }
-
-  handleEqualClick() {
-    const { display, operation, stack } = this.state
-    const finalStack = push(stack, intFromString(display))
-
-    this.setState({
-      stack: [],
-      operation: identity,
-      display: calculateValue(finalStack, operation),
-      digitPressed: false
-    })
+  handleAction(action) {
+    this.setState(calculateState(this.state, action))
   }
 
   render() {
@@ -75,41 +92,37 @@ class Calculator extends Component {
       <div className='calculator-body'>
         <Display value={ display } />
         <div className='calculator-buttons'>
-          <Button label='7' onClick={ () => this.handleNumberClick(7) } />
-          <Button label='8' onClick={ () => this.handleNumberClick(8) } />
-          <Button label='9' onClick={ () => this.handleNumberClick(9) } />
+          <Button label='7' onClick={ () => this.handleAction(pressDigit(7)) } />
+          <Button label='8' onClick={ () => this.handleAction(pressDigit(8)) } />
+          <Button label='9' onClick={ () => this.handleAction(pressDigit(9)) } />
           <Button
             label='%'
-            onClick={ () => this.handleOperationClick(divide) }
+            onClick={ () => this.handleAction(pressOperation(divide)) }
           />
-          <Button label='4' onClick={ () => this.handleNumberClick(4) } />
-          <Button label='5' onClick={ () => this.handleNumberClick(5) } />
-          <Button label='6' onClick={ () => this.handleNumberClick(6) } />
+          <Button label='4' onClick={ () => this.handleAction(pressDigit(4)) } />
+          <Button label='5' onClick={ () => this.handleAction(pressDigit(5)) } />
+          <Button label='6' onClick={ () => this.handleAction(pressDigit(6)) } />
           <Button
             label='&times;'
-            onClick={ () => this.handleOperationClick(multiply) }
+            onClick={ () => this.handleAction(pressOperation(multiply)) }
           />
-          <Button label='1' onClick={ () => this.handleNumberClick(1) } />
-          <Button label='2' onClick={ () => this.handleNumberClick(2) } />
-          <Button label='3' onClick={ () => this.handleNumberClick(3) } />
+          <Button label='1' onClick={ () => this.handleAction(pressDigit(1)) } />
+          <Button label='2' onClick={ () => this.handleAction(pressDigit(2)) } />
+          <Button label='3' onClick={ () => this.handleAction(pressDigit(3)) } />
           <Button
             label='-'
-            onClick={ () => this.handleOperationClick(subtract) }
+            onClick={ () => this.handleAction(pressOperation(subtract)) }
           />
-          <Button
-            label='0'
-            onClick={ () => this.handleNumberClick(0) }
-            style={ styles.zeroButton }
-          />
-          <Button label='C' onClick={ () => this.setState(initialState) } />
+          <Button label='0' onClick={ () => this.handleAction(pressDigit(0)) } />
+          <Button label='C' onClick={ () => this.handleAction(pressClear()) } />
           <Button
             label='='
-            onClick={ () => this.handleEqualClick() }
+            onClick={ () => this.handleAction(pressEqual()) }
             style={ styles.equalsButton }
           />
           <Button
             label='+'
-            onClick={ () => this.handleOperationClick(add) }
+            onClick={ () => this.handleAction(pressOperation(add)) }
           />
         </div>
       </div>
