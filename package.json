@@ -1,0 +1,24 @@
+{
+  "name": "react-calculator",
+  "version": "1.0.0",
+  "description": "Play around with React",
+  "main": "calculator.js",
+  "private": true,
+  "scripts": {
+    "start": "babel --plugins transform-react-jsx calculator.js --watch --out-dir build/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jerelmiller/react-calculator.git"
+  },
+  "author": "Jerel Miller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jerelmiller/react-calculator/issues"
+  },
+  "homepage": "https://github.com/jerelmiller/react-calculator#readme",
+  "devDependencies": {
+    "babel-cli": "^6.5.1",
+    "babel-plugin-transform-react-jsx": "^6.5.2"
+  }
+}
