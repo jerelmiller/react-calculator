@@ -12,6 +12,9 @@ const divide = (a, b) => a / b
 
 const push = (arr, value) => [...arr, value]
 const intFromString = string => parseInt(string, 10)
+const identity = val => val
+
+const calculateValue = (stack, operation) => stack.reduce(operation)
 
 const Button = ({ label, onClick, style }) => (
   <button className='calculator-button' onClick={ onClick } style={ style }>
@@ -23,61 +26,49 @@ const Display = ({ value }) => (
   <div className='calculator-display'>{ value }</div>
 )
 
+const calculateDisplay = (state, number) => (
+  state.digitPressed ? `${state.display}${number}` : number
+)
+
+const initialState = {
+  display: 0,
+  digitPressed: false,
+  operation: identity,
+  stack: []
+}
+
 class Calculator extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      display: '0',
-      digitPressed: false,
-      operation: null,
-      stack: []
-    }
+    this.state = initialState
   }
 
   handleNumberClick(number) {
-    let { display, digitPressed } = this.state
-    display = digitPressed ? `${display}${number}` : number
-
-    this.setState({ display, digitPressed: true })
+    this.setState({
+      display: calculateDisplay(this.state, number),
+      digitPressed: true
+    })
   }
 
   handleOperationClick(operation) {
     let { display, stack } = this.state
-    stack = push(stack, intFromString(display))
-
-    if (this.state.operation) {
-      this.handleEqualClick()
-    }
 
     this.setState({
-      stack,
       operation,
+      stack: push(stack, intFromString(display)),
       digitPressed: false
     })
   }
 
   handleEqualClick() {
-    let { display, operation, stack } = this.state
-    stack = push(stack, intFromString(display))
-
-    if (operation) {
-      display = stack.reduce(operation)
-    }
+    const { display, operation, stack } = this.state
+    const finalStack = push(stack, intFromString(display))
 
     this.setState({
       stack: [],
-      operation: null,
-      display,
-      digitPressed: false
-    })
-  }
-
-  handleClear() {
-    this.setState({
-      display: '0',
-      stack: [],
-      operation: null,
+      operation: identity,
+      display: calculateValue(finalStack, operation),
       digitPressed: false
     })
   }
@@ -115,7 +106,7 @@ class Calculator extends Component {
             onClick={ () => this.handleNumberClick(0) }
             style={ styles.zeroButton }
           />
-          <Button label='C' onClick={ () => this.handleClear() } />
+          <Button label='C' onClick={ () => this.setState(initialState) } />
           <Button
             label='='
             onClick={ () => this.handleEqualClick() }
