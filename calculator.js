@@ -1,10 +1,5 @@
 const { Component } = React
 
-const ADD = 'ADD'
-const SUBSTRACT = 'SUBSTRACT'
-const MULTIPLY = 'MULTIPLY'
-const DIVIDE = 'DIVIDE'
-
 const add = (a, b) => a + b
 const subtract = (a, b) => a - b
 const multiply = (a, b) => a * b
