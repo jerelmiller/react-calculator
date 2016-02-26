@@ -63,6 +63,15 @@ class Calculator extends Component {
     this.setState({ stack: [], operation: null, display, digitPressed: false })
   }
 
+  handleClear() {
+    this.setState({
+      display: '0',
+      stack: [],
+      operation: null,
+      digitPressed: false
+    })
+  }
+
   render() {
     const { display } = this.state
 
@@ -96,6 +105,7 @@ class Calculator extends Component {
             onClick={ () => this.handleNumberClick(0) }
             style={ styles.zeroButton }
           />
+          <Button label='C' onClick={ () => this.handleClear() } />
           <Button
             label='='
             onClick={ () => this.handleEqualClick() }
@@ -112,9 +122,6 @@ class Calculator extends Component {
 }
 
 const styles = {
-  zeroButton: {
-    width: '49%'
-  },
   equalsButton: {
     background: '#4d90fe',
     color: '#fff'
