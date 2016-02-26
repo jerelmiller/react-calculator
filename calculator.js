@@ -6,6 +6,7 @@ const multiply = (a, b) => a * b
 const divide = (a, b) => a / b
 
 const push = (arr, value) => [...arr, value]
+const pushInt = (arr, value) => push(arr, intFromString(value))
 const intFromString = string => parseInt(string, 10)
 const identity = val => val
 
@@ -46,11 +47,11 @@ const calculateState = (state = initialState, action) => {
     case 'PRESS_OPERATION':
       return Object.assign({}, state, {
         operation: action.operation,
-        stack: push(state.stack, intFromString(state.display)),
+        stack: pushInt(state.stack, state.display),
         digitPressed: false
       })
     case 'PRESS_EQUAL':
-      const finalStack = push(state.stack, intFromString(state.display))
+      const finalStack = pushInt(state.stack, state.display)
 
       return Object.assign({}, state, {
         stack: [],
