@@ -27,7 +27,7 @@ const Display = ({ value }) => (
 )
 
 const calculateDisplay = (state, number) => (
-  state.digitPressed ? `${state.display}${number}` : number
+  state.digitPressed ? intFromString(`${state.display}${number}`) : number
 )
 
 const initialState = {
