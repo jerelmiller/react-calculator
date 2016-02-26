@@ -1,37 +1,110 @@
 const { Component } = React
 
+const ADD = 'ADD'
+const SUBSTRACT = 'SUBSTRACT'
+const MULTIPLY = 'MULTIPLY'
+const DIVIDE = 'DIVIDE'
+
+const operate = (a, b, operation) => {
+  switch (operation) {
+    case ADD:
+      return a + b
+    case SUBSTRACT:
+      return a - b
+    case MULTIPLY:
+      return a * b
+    case DIVIDE:
+      return a / b
+  }
+}
+
 const Button = ({ label, onClick, style }) => (
   <button className='calculator-button' onClick={ onClick } style={ style }>
     { label }
   </button>
 )
 
-const Display = () => (
-  <div className='calculator-display'>0</div>
+const Display = ({ value }) => (
+  <div className='calculator-display'>{ value }</div>
 )
 
-
 class Calculator extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      display: '0',
+      digitPressed: false,
+      operation: null,
+      stack: []
+    }
+  }
+
+  handleNumberClick(number) {
+    let { display, digitPressed } = this.state
+    display = digitPressed ? `${display}${number}` : number
+
+    this.setState({ display, digitPressed: true })
+  }
+
+  handleOperationClick(operation) {
+    let { display, stack } = this.state
+    stack = [...stack, parseInt(display, 10)]
+
+    this.setState({ stack, operation, digitPressed: false })
+  }
+
+  handleEqualClick() {
+    let { display, operation, stack } = this.state
+    stack = [...stack, parseInt(display, 10)]
+    const memo = stack.shift()
+    display = stack.reduce((memo, num) => operate(memo, num, operation), memo)
+
+    this.setState({ stack: [], operation: null, display, digitPressed: false })
+  }
+
   render() {
+    const { display } = this.state
+
     return (
       <div className='calculator-body'>
-        <Display />
+        <Display value={ display } />
         <div className='calculator-buttons'>
-          <Button label='7' onClick={ () => {} } />
-          <Button label='8' onClick={ () => {} } />
-          <Button label='9' onClick={ () => {} } />
-          <Button label='%' onClick={ () => {} } />
-          <Button label='4' onClick={ () => {} } />
-          <Button label='5' onClick={ () => {} } />
-          <Button label='6' onClick={ () => {} } />
-          <Button label='&times;' onClick={ () => {} } />
-          <Button label='1' onClick={ () => {} } />
-          <Button label='2' onClick={ () => {} } />
-          <Button label='3' onClick={ () => {} } />
-          <Button label='-' onClick={ () => {} } />
-          <Button label='0' onClick={ () => {} } style={ styles.zeroButton } />
-          <Button label='=' onClick={ () => {} } style={ styles.equalsButton }/>
-          <Button label='+' onClick={ () => {} } />
+          <Button label='7' onClick={ () => this.handleNumberClick(7) } />
+          <Button label='8' onClick={ () => this.handleNumberClick(8) } />
+          <Button label='9' onClick={ () => this.handleNumberClick(9) } />
+          <Button
+            label='%'
+            onClick={ () => this.handleOperationClick(DIVIDE) }
+          />
+          <Button label='4' onClick={ () => this.handleNumberClick(4) } />
+          <Button label='5' onClick={ () => this.handleNumberClick(5) } />
+          <Button label='6' onClick={ () => this.handleNumberClick(6) } />
+          <Button
+            label='&times;'
+            onClick={ () => this.handleOperationClick(MULTIPLY) }
+          />
+          <Button label='1' onClick={ () => this.handleNumberClick(1) } />
+          <Button label='2' onClick={ () => this.handleNumberClick(2) } />
+          <Button label='3' onClick={ () => this.handleNumberClick(3) } />
+          <Button
+            label='-'
+            onClick={ () => this.handleOperationClick(SUBSTRACT) }
+          />
+          <Button
+            label='0'
+            onClick={ () => this.handleNumberClick(0) }
+            style={ styles.zeroButton }
+          />
+          <Button
+            label='='
+            onClick={ () => this.handleEqualClick() }
+            style={ styles.equalsButton }
+          />
+          <Button
+            label='+'
+            onClick={ () => this.handleOperationClick(ADD) }
+          />
         </div>
       </div>
     )
