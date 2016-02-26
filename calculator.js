@@ -37,6 +37,8 @@ const pressOperation = operation => ({
 const pressEqual = () => ({ type: 'PRESS_EQUAL' })
 const pressClear = () => ({ type: 'PRESS_CLEAR' })
 
+const pushDisplayValue = state => pushInt(state.stack, state.display)
+
 const calculateState = (state = initialState, action) => {
   switch (action.type) {
     case 'PRESS_DIGIT':
@@ -47,16 +49,14 @@ const calculateState = (state = initialState, action) => {
     case 'PRESS_OPERATION':
       return Object.assign({}, state, {
         operation: action.operation,
-        stack: pushInt(state.stack, state.display),
+        stack: pushDisplayValue(state),
         digitPressed: false
       })
     case 'PRESS_EQUAL':
-      const finalStack = pushInt(state.stack, state.display)
-
       return Object.assign({}, state, {
         stack: [],
         operation: identity,
-        display: calculateValue(finalStack, state.operation),
+        display: calculateValue(pushDisplayValue(state), state.operation),
         digitPressed: false
       })
     case 'PRESS_CLEAR':
