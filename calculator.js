@@ -69,7 +69,10 @@ class Calculator extends Component {
   handleEqualClick() {
     let { display, operation, stack } = this.state
     stack = push(stack, intFromString(display))
-    display = stack.reduce(operate(operation))
+
+    if (operation) {
+      display = stack.reduce(operate(operation))
+    }
 
     this.setState({ stack: [], operation: null, display, digitPressed: false })
   }
