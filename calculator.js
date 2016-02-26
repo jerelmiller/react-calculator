@@ -51,6 +51,10 @@ class Calculator extends Component {
     let { display, stack } = this.state
     stack = [...stack, parseInt(display, 10)]
 
+    if (this.state.operation) {
+      this.handleEqualClick()
+    }
+
     this.setState({ stack, operation, digitPressed: false })
   }
 
