@@ -5,16 +5,21 @@ const SUBSTRACT = 'SUBSTRACT'
 const MULTIPLY = 'MULTIPLY'
 const DIVIDE = 'DIVIDE'
 
+const add = (a, b) => a + b
+const subtract = (a, b) => a - b
+const multiple = (a, b) => a * b
+const divide = (a, b) => a / b
+
 const operate = (a, b, operation) => {
   switch (operation) {
     case ADD:
-      return a + b
+      return add(a, b)
     case SUBSTRACT:
-      return a - b
+      return subtract(a, b)
     case MULTIPLY:
-      return a * b
+      return multiple(a, b)
     case DIVIDE:
-      return a / b
+      return divide(a, b)
   }
 }
 
