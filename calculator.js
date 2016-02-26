@@ -7,7 +7,7 @@ const DIVIDE = 'DIVIDE'
 
 const add = (a, b) => a + b
 const subtract = (a, b) => a - b
-const multiple = (a, b) => a * b
+const multiply = (a, b) => a * b
 const divide = (a, b) => a / b
 
 const operate = (a, b, operation) => {
@@ -17,7 +17,7 @@ const operate = (a, b, operation) => {
     case SUBSTRACT:
       return subtract(a, b)
     case MULTIPLY:
-      return multiple(a, b)
+      return multiply(a, b)
     case DIVIDE:
       return divide(a, b)
   }
