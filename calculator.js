@@ -10,6 +10,9 @@ const subtract = (a, b) => a - b
 const multiply = (a, b) => a * b
 const divide = (a, b) => a / b
 
+const push = (arr, value) => [...arr, value]
+const intFromString = string => parseInt(string, 10)
+
 const operate = (a, b, operation) => {
   switch (operation) {
     case ADD:
@@ -54,7 +57,7 @@ class Calculator extends Component {
 
   handleOperationClick(operation) {
     let { display, stack } = this.state
-    stack = [...stack, parseInt(display, 10)]
+    stack = push(stack, intFromString(display))
 
     if (this.state.operation) {
       this.handleEqualClick()
@@ -65,9 +68,10 @@ class Calculator extends Component {
 
   handleEqualClick() {
     let { display, operation, stack } = this.state
-    stack = [...stack, parseInt(display, 10)]
-    const memo = stack.shift()
-    display = stack.reduce((memo, num) => operate(memo, num, operation), memo)
+    stack = push(stack, intFromString(display))
+    const memo = stack[0]
+    const rest = stack.slice(1)
+    display = rest.reduce((memo, num) => operate(memo, num, operation), memo)
 
     this.setState({ stack: [], operation: null, display, digitPressed: false })
   }
