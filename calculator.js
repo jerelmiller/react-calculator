@@ -13,16 +13,16 @@ const divide = (a, b) => a / b
 const push = (arr, value) => [...arr, value]
 const intFromString = string => parseInt(string, 10)
 
-const operate = (a, b, operation) => {
+const operate = operation => {
   switch (operation) {
     case ADD:
-      return add(a, b)
+      return add
     case SUBSTRACT:
-      return subtract(a, b)
+      return subtract
     case MULTIPLY:
-      return multiply(a, b)
+      return multiply
     case DIVIDE:
-      return divide(a, b)
+      return divide
   }
 }
 
@@ -69,9 +69,7 @@ class Calculator extends Component {
   handleEqualClick() {
     let { display, operation, stack } = this.state
     stack = push(stack, intFromString(display))
-    const memo = stack[0]
-    const rest = stack.slice(1)
-    display = rest.reduce((memo, num) => operate(memo, num, operation), memo)
+    display = stack.reduce(operate(operation))
 
     this.setState({ stack: [], operation: null, display, digitPressed: false })
   }
