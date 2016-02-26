@@ -10,18 +10,7 @@ const intFromString = string => parseInt(string, 10)
 const identity = val => val
 
 const calculateValue = (stack, operation) => stack.reduce(operation)
-
-const Button = ({ label, onClick, style }) => (
-  <button className='calculator-button' onClick={ onClick } style={ style }>
-    { label }
-  </button>
-)
-
-const Display = ({ value }) => (
-  <div className='calculator-display'>{ value }</div>
-)
-
-const calculateDisplay = (state, digit) => (
+const concatDisplay = (state, digit) => (
   state.digitPressed ? intFromString(`${state.display}${digit}`) : digit
 )
 
@@ -49,7 +38,7 @@ const calculateState = (state = initialState, action) => {
   switch (action.type) {
     case 'PRESS_DIGIT':
       return Object.assign({}, state, {
-        display: calculateDisplay(state, action.digit),
+        display: concatDisplay(state, action.digit),
         digitPressed: true
       })
     case 'PRESS_OPERATION':
@@ -73,6 +62,16 @@ const calculateState = (state = initialState, action) => {
       return state
   }
 }
+
+const Button = ({ label, onClick, style }) => (
+  <button className='calculator-button' onClick={ onClick } style={ style }>
+    { label }
+  </button>
+)
+
+const Display = ({ value }) => (
+  <div className='calculator-display'>{ value }</div>
+)
 
 class Calculator extends Component {
   constructor(props) {
