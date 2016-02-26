@@ -5,7 +5,7 @@
   "main": "calculator.js",
   "private": true,
   "scripts": {
-    "start": "babel --plugins transform-react-jsx calculator.js --watch --out-dir build/"
+    "start": "babel calculator.js --watch --out-dir build/"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/jerelmiller/react-calculator#readme",
   "devDependencies": {
     "babel-cli": "^6.5.1",
-    "babel-plugin-transform-react-jsx": "^6.5.2"
+    "babel-plugin-transform-react-jsx": "^6.5.2",
+    "babel-preset-es2016-node5": "^1.1.2"
   }
 }
