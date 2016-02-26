@@ -50,7 +50,11 @@ class Calculator extends Component {
       this.handleEqualClick()
     }
 
-    this.setState({ stack, operation, digitPressed: false })
+    this.setState({
+      stack,
+      operation,
+      digitPressed: false
+    })
   }
 
   handleEqualClick() {
@@ -61,7 +65,12 @@ class Calculator extends Component {
       display = stack.reduce(operation)
     }
 
-    this.setState({ stack: [], operation: null, display, digitPressed: false })
+    this.setState({
+      stack: [],
+      operation: null,
+      display,
+      digitPressed: false
+    })
   }
 
   handleClear() {
